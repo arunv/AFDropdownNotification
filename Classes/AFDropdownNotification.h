@@ -44,7 +44,8 @@ typedef void (^block)(AFDropdownNotificationEvent event);
 @property (nonatomic, strong) UIButton *bottomButton;
 
 @property (nonatomic) BOOL isBeingShown;
-
+@property (nonatomic) BOOL isImageRounded;
+                      
 -(void)listenEventsWithBlock:(block)block;
 
 -(void)presentInView:(UIView *)view withGravityAnimation:(BOOL)animation;

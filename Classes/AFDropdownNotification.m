@@ -118,6 +118,12 @@
         
         if (_image) {
             [_notificationView addSubview:_imageView];
+            
+            if (self.isImageRounded) {
+              self.imageView.clipsToBounds = YES;
+              self.imageView.layer.cornerRadius = kDropdownImageSize/2;
+              self.imageView.image = _image;
+            }
         }
         
         _titleLabel.frame = CGRectMake(kDropdownPadding + kDropdownImageSize + kDropdownPadding, 20 + kDropdownPadding, textWidth, titleHeight);
@@ -238,6 +244,7 @@
     } else {
         
         [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [_animator removeAllBehaviors];
             
             _notificationView.frame = CGRectMake(0, -_notificationView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, _notificationView.frame.size.height);
         } completion:^(BOOL finished) {
