@@ -8,20 +8,17 @@
 
 #import "AFDropdownNotification.h"
 
+
 #define kDropdownImageSize 40
 #define kDropdownPadding 10
-#define kDropdownTitleFontSize 19
+#define kDropdownTitleFontSize 24
 #define kDropdownSubtitleFontSize 14
 #define kDropdownButtonWidth 75
 #define kDropdownButtonHeight 30
 
 @interface AFDropdownNotification ()
 
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *subtitleLabel;
-@property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIButton *topButton;
-@property (nonatomic, strong) UIButton *bottomButton;
+
 
 @property (nonatomic) CGSize screenSize;
 @property (nonatomic, strong) UIDynamicAnimator *animator;
@@ -88,13 +85,14 @@
         _imageView.image = _image;
         _titleLabel.text = _titleText;
         _subtitleLabel.text = _subtitleText;
+        
         [_topButton setTitle:_topButtonText forState:UIControlStateNormal];
         [_bottomButton setTitle:_bottomButtonText forState:UIControlStateNormal];
         
         NSInteger textWidth = ([[UIScreen mainScreen] bounds].size.width - kDropdownPadding - kDropdownImageSize - kDropdownPadding - kDropdownPadding - kDropdownButtonWidth - kDropdownPadding);
         NSInteger titleHeight = [_titleLabel.text boundingRectWithSize:CGSizeMake(textWidth, 999) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Medium" size:kDropdownTitleFontSize]} context:nil].size.height;
         NSInteger subtitleHeight = [_subtitleLabel.text boundingRectWithSize:CGSizeMake(textWidth, 999) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:kDropdownSubtitleFontSize]} context:nil].size.height;
-        NSInteger notificationHeight = (20 + kDropdownPadding + titleHeight + (kDropdownPadding / 2) + subtitleHeight + kDropdownPadding);
+        NSInteger notificationHeight = (20 + kDropdownPadding + titleHeight + (subtitleHeight > 0 ? kDropdownPadding / 2.0 : 0.0) + subtitleHeight + kDropdownPadding);
         
         if (notificationHeight < 100) {
             
@@ -120,12 +118,6 @@
         
         if (_image) {
             [_notificationView addSubview:_imageView];
-            
-            if (self.isImageRounded) {
-                self.imageView.clipsToBounds = YES;
-                self.imageView.layer.cornerRadius = kDropdownImageSize/2;
-                self.imageView.image = _image;
-            }
         }
         
         _titleLabel.frame = CGRectMake(kDropdownPadding + kDropdownImageSize + kDropdownPadding, 20 + kDropdownPadding, textWidth, titleHeight);
@@ -140,7 +132,8 @@
             [_notificationView addSubview:_subtitleLabel];
         }
         
-        _topButton.frame = CGRectMake(_titleLabel.frame.origin.x + _titleLabel.frame.size.width + kDropdownPadding, 20 + (kDropdownPadding / 2), kDropdownButtonWidth, kDropdownButtonHeight);
+        CGFloat heightOfButtons = kDropdownButtonHeight * 2 + 6;
+        _topButton.frame = CGRectMake(_titleLabel.frame.origin.x + _titleLabel.frame.size.width + kDropdownPadding, (notificationHeight - heightOfButtons) / 2.0, kDropdownButtonWidth, kDropdownButtonHeight);
         [_topButton addTarget:self action:@selector(topButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         
         if (_topButtonText) {
@@ -245,8 +238,6 @@
     } else {
         
         [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            
-            [_animator removeAllBehaviors];
             
             _notificationView.frame = CGRectMake(0, -_notificationView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, _notificationView.frame.size.height);
         } completion:^(BOOL finished) {
