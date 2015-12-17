@@ -139,7 +139,8 @@
         }
         
         CGFloat heightOfButtons = kDropdownButtonHeight * 2 + 6;
-        _topButton.frame = CGRectMake(_titleLabel.frame.origin.x + _titleLabel.frame.size.width + kDropdownPadding, (notificationHeight - heightOfButtons) / 2.0, kDropdownButtonWidth, kDropdownButtonHeight);
+        CGFloat buttonSpace = notificationHeight - 2 * kDropdownPadding - 6;
+        _topButton.frame = CGRectMake(_titleLabel.frame.origin.x + _titleLabel.frame.size.width + kDropdownPadding, 6 + kDropdownPadding + (buttonSpace - heightOfButtons) / 2.0, kDropdownButtonWidth, kDropdownButtonHeight);
         [_topButton addTarget:self action:@selector(topButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         
         if (_topButtonText) {
