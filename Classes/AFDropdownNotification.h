@@ -17,8 +17,6 @@
 
 @end
 
-@interface AFDropdownNotification : NSObject
-
 typedef NS_ENUM(NSInteger, AFDropdownNotificationEvent) {
     
     AFDropdownNotificationEventTopButton,
@@ -27,6 +25,8 @@ typedef NS_ENUM(NSInteger, AFDropdownNotificationEvent) {
 };
 
 typedef void (^block)(AFDropdownNotificationEvent event);
+
+@interface AFDropdownNotification : NSObject
 
 @property (nonatomic, strong) id<AFDropdownNotificationDelegate> notificationDelegate;
 
